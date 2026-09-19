@@ -1,0 +1,10 @@
+# Verilator generated files
+obj_dir/
+*.vcd
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db

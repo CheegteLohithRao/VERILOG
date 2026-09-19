@@ -57,4 +57,7 @@ All implemented logic gates produced the expected truth-table behavior for the t
 
 ### Waveform
 
-![Logic Gates Waveform](waveforms/logic_gates.png)
+![Logic Gates Waveform](at00.png)
+![Logic Gates Waveform](at01.png)
+![Logic Gates Waveform](at10.png)
+![Logic Gates Waveform](at11.png)

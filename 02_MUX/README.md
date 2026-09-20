@@ -22,14 +22,33 @@ The multiplexer selects one of two 1-bit inputs based on a select signal.
 
 ### Selection Logic
 
+Compact Truth Table
+
 | `sel` | Selected Input | `y` |
 |------:|----------------|-----|
 | 0     | `i0`           | `i0` |
 | 1     | `i1`           | `i1` |
 
+
+### Selection Logic
+
+Complete Truth Table
+
+| `sel` | `i0` | `i1` | `y` |
+|------:|-----:|-----:|----:|
+| 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 |
+| 0 | 1 | 0 | 1 |
+| 0 | 1 | 1 | 1 |
+| 1 | 0 | 0 | 0 |
+| 1 | 0 | 1 | 1 |
+| 1 | 1 | 0 | 0 |
+| 1 | 1 | 1 | 1 |
+
 ### Waveform
 ![Waveform](images/mux1.png)
 ![Waveform](images/mux2.png)
+![Waveform](images/full2mux.png)
 
 ### Boolean Expression
 

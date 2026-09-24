@@ -1,34 +1,56 @@
 # Full Adder Design in SystemVerilog
 
-This project contains a 1-bit full adder implemented in SystemVerilog along with a simple testbench to verify its behavior across all possible input combinations.
+This project demonstrates a 1-bit full adder implemented by instantiating a 1-bit half adder module. The design is verified using a testbench that covers all possible input combinations for `a`, `b`, and `cin`.
 
 ## Project Files
 
-- `fulladder.sv` — Full adder design under test (DUT)
-- `tb_fulladder.sv` — Testbench that drives the inputs and checks the outputs
-- `tb_fulladder.vcd` — Waveform dump generated during simulation
+- `halfadder.sv` — 1-bit half adder used as a reusable submodule
+- `fulladder.sv` — 1-bit full adder built using two half adders
+- `tb_fulladder.sv` — Testbench that verifies the full adder functionality
+- `tb_fulladder.vcd` — Generated waveform file during simulation
+- `images/wav.png` — Simulation waveform screenshot
+- `images/cmd.png` — Terminal output screenshot
 
 ## Design Overview
 
-The full adder is a combinational digital logic circuit that adds three 1-bit inputs:
+A full adder adds three single-bit inputs:
 
-- `a` : first input bit
-- `b` : second input bit
-- `cin` : carry-in from a previous stage
+- `a` — first input bit
+- `b` — second input bit
+- `cin` — carry-in from the previous stage
 
 It produces:
 
-- `sum` : resulting bit of the addition
-- `cout` : carry-out bit to the next stage
+- `sum` — result bit
+- `cout` — carry-out bit
 
-The logic equations implemented are:
+The functionality is implemented in a hierarchical manner:
 
-- `sum = a ^ b ^ cin`
-- `cout = (a & b) | (b & cin) | (a & cin)`
+1. The first half adder computes `sum1 = a ^ b` and `carry1 = a & b`
+2. The second half adder computes `sum = sum1 ^ cin` and `carry2 = sum1 & cin`
+3. Final carry is `cout = carry1 | carry2`
 
-These equations describe the standard full adder operation used in binary arithmetic.
+This uses the fact that a full adder can be built from two half adders and an OR gate for the carry combination.
 
-## Module Interface
+## Half Adder Module
+
+`halfadder.sv` implements the basic addition of two 1-bit inputs:
+
+```systemverilog
+module halfadder(
+    input logic a,
+    input logic b,
+    output logic sum,
+    output logic carry
+);
+    assign sum = a ^ b;
+    assign carry = a & b;
+endmodule
+```
+
+## Full Adder Module
+
+`fulladder.sv` instantiates two `halfadder` modules and combines the carry outputs:
 
 ```systemverilog
 module fulladder(
@@ -38,7 +60,36 @@ module fulladder(
     output logic sum,
     output logic cout
 );
+    logic sum1;
+    logic carry1;
+    logic carry2;
+
+    halfadder ha1 (
+        .a(a),
+        .b(b),
+        .sum(sum1),
+        .carry(carry1)
+    );
+
+    halfadder ha2 (
+        .a(sum1),
+        .b(cin),
+        .sum(sum),
+        .carry(carry2)
+    );
+
+    assign cout = carry1 | carry2;
+endmodule
 ```
+
+## Boolean Equations
+
+The full adder logic can also be represented as:
+
+- `sum = a ^ b ^ cin`
+- `cout = (a & b) | (b & cin) | (a & cin)`
+
+These are equivalent to the hierarchical half-adder implementation shown above.
 
 ## Truth Table
 
@@ -55,33 +106,37 @@ module fulladder(
 
 ## Testbench Description
 
-The testbench `tb_fulladder.sv` instantiates the module and iterates through all combinations of `a`, `b`, and `cin` using nested loops.
+The testbench `tb_fulladder.sv` instantiates the `fulladder` DUT and iterates through all 8 possible input combinations.
 
-For each case:
+For each case, it:
 
-- the inputs are assigned,
-- a simulation delay is applied,
-- the outputs are observed,
-- the result is displayed using `$display`,
-- a VCD waveform is created via `$dumpfile` and `$dumpvars`
+- applies values to `a`, `b`, and `cin`
+- waits for a simulation delay of `#10`
+- computes expected values using logical expressions
+- compares actual and expected outputs
+- prints either a pass or fail message using `$display`
+- saves a VCD waveform using `$dumpfile` and `$dumpvars`
 
-This verifies the full adder output for every possible input condition.
+This confirms that the hierarchical implementation behaves exactly like a standard full adder.
 
 ## Simulation Waveforms
 
-![waveform](images/wav.png)
-![output](images/cmd.png)
+The images below show the waveform output and command output from the simulation.
 
-## Purpose
+![Waveform output](images/wav.png)
+![Console output](images/cmd.png)
 
-This example is useful for learning:
 
-- SystemVerilog module design
-- combinational logic modeling
-- full adder implementation
-- RTL simulation and waveform viewing
-- basic testbench structure for digital design verification
+## Learning Value
+
+This project helps in understanding:
+
+- module-based design in SystemVerilog
+- hierarchical digital design using submodules
+- half adder and full adder logic
+- RTL verification through testbenches
+- waveform analysis for combinational logic
 
 ## Summary
 
-The `fulladder` module is a fundamental arithmetic building block. It performs the addition of two single-bit inputs and a carry-in, generating a sum bit and carry-out bit. This design is the basis for larger arithmetic circuits such as ripple-carry adders and multi-bit adders.
+The full adder is built using two half adders connected together. This modular design demonstrates how larger digital arithmetic circuits can be created by reusing smaller blocks, making the design easier to understand, verify, and extend.

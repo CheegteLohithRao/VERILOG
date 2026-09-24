@@ -28,8 +28,8 @@ initial begin
                 cin = cin0[0];
                 #10; 
 
-                expected_s = sum;
-                expected_c = cout;
+                expected_s = a ^ b ^ cin;
+                expected_c = (a & b) | (b & cin) | (a & cin);
 
                 if (sum !== expected_s || cout !== expected_c) begin
                     $display("Test failed for a=%b, b=%b, cin=%b: sum=%b (expected %b), cout=%b (expected %b)", 

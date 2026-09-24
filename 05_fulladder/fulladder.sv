@@ -5,9 +5,25 @@ module fulladder(
     output logic sum,
     output logic cout
 );
+    logic sum1;
+    logic carry1;
+    logic carry2;
 
-    assign sum = a ^ b ^ cin;
-    assign cout = (a & b) | (b & cin) | (a & cin);
+    halfadder ha1 (
+        .a(a),
+        .b(b),
+        .sum(sum1),
+        .carry(carry1)
+    );
+    
+    halfadder ha2 (
+        .a(sum1),
+        .b(cin),
+        .sum(sum),
+        .carry(carry2)
+    );
+
+        assign cout = carry1 | carry2;
 
 endmodule
 

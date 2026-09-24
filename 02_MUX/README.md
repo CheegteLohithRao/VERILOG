@@ -32,7 +32,7 @@ Compact Truth Table
 
 ### Selection Logic
 
-Complete Truth Table
+Complete Truth Tabled
 
 | `sel` | `i0` | `i1` | `y` |
 |------:|-----:|-----:|----:|

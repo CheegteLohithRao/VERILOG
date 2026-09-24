@@ -49,6 +49,7 @@ Complete Truth Tabled
 ![Waveform](images/mux1.png)
 ![Waveform](images/mux2.png)
 ![Waveform](images/full2mux.png)
+![Waveform](images/selfv.png)
 
 ### Boolean Expression
 
